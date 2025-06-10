@@ -55,12 +55,6 @@ class CategoriesList extends Component
         $this->reset('showModal', 'editedCategoryId');
     }
 
-    public function cancel(): void
-    {
-        $this->resetValidation();
-        $this->reset('showModal', 'category', 'name', 'slug');
-    }
-
     public function cancelCategoryEdit(): void
     {
         $this->resetValidation();

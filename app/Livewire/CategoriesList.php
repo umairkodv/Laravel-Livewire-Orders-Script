@@ -1,14 +1,13 @@
 <?php
-
 namespace App\Livewire;
 
-use Livewire\Component;
 use App\Models\Category;
+use Illuminate\Contracts\View\View;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Livewire\Attributes\On;
+use Livewire\Component;
 use Livewire\WithPagination;
-use Illuminate\Support\Collection;
-use Illuminate\Contracts\View\View;
 
 class CategoriesList extends Component
 {
@@ -29,7 +28,7 @@ class CategoriesList extends Component
 
     public int $currentPage = 1;
 
-	public int $perPage = 10;
+    public int $perPage = 10;
 
     public function openModal(): void
     {
@@ -39,6 +38,7 @@ class CategoriesList extends Component
     public function updatedName(): void
     {
         $this->slug = Str::slug($this->name);
+        dd($this->slug);
     }
 
     public function save(): void
@@ -72,7 +72,7 @@ class CategoriesList extends Component
     public function updateOrder($list): void
     {
         foreach ($list as $item) {
-            $cat = $this->categories->firstWhere('id', $item['value']);
+            $cat   = $this->categories->firstWhere('id', $item['value']);
             $order = $item['order'] + (($this->currentPage - 1) * $this->perPage);
 
             if ($cat['position'] != $order) {
@@ -86,8 +86,8 @@ class CategoriesList extends Component
         $this->editedCategoryId = $categoryId;
 
         $this->category = Category::find($categoryId);
-        $this->name = $this->category->name;
-        $this->slug = $this->category->slug;
+        $this->name     = $this->category->name;
+        $this->slug     = $this->category->slug;
     }
 
     public function deleteConfirm(string $method, $id = null): void
@@ -109,13 +109,13 @@ class CategoriesList extends Component
 
     public function render(): View
     {
-        $cats = Category::orderBy('position')->paginate($this->perPage);
-        $links = $cats->links();
+        $cats              = Category::orderBy('position')->paginate($this->perPage);
+        $links             = $cats->links();
         $this->currentPage = $cats->currentPage();
-        $this->categories = collect($cats->items());
+        $this->categories  = collect($cats->items());
 
         $this->active = $this->categories->mapWithKeys(
-            fn (Category $item) => [$item['id'] => (bool) $item['is_active']]
+            fn(Category $item) => [$item['id'] => (bool) $item['is_active']]
         )->toArray();
 
         return view('livewire.categories-list', [

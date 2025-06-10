@@ -38,7 +38,6 @@ class CategoriesList extends Component
     public function updatedName(): void
     {
         $this->slug = Str::slug($this->name);
-        dd($this->slug);
     }
 
     public function save(): void
@@ -54,6 +53,12 @@ class CategoriesList extends Component
 
         $this->resetValidation();
         $this->reset('showModal', 'editedCategoryId');
+    }
+
+    public function cancel(): void
+    {
+        $this->resetValidation();
+        $this->reset('showModal', 'category', 'name', 'slug');
     }
 
     public function cancelCategoryEdit(): void
